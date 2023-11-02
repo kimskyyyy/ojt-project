@@ -10,11 +10,23 @@ var postRouter = require("./routes/post");
 var uploadRouter = require("./routes/upload");
 var downloadRouter = require("./routes/download");
 
+const { sequelize } = require("./models");
+
 var app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
+
+// DB
+sequelize
+  .sync({ force: false })
+  .then(() => {
+    console.log("mariadb 연결 성공");
+  })
+  .catch((err) => {
+    console.log(`연결실패 ${err}`);
+  });
 
 app.use(logger("dev"));
 app.use(express.json());
